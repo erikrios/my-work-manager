@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
@@ -38,6 +39,7 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
         val client = SyncHttpClient()
         val url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$APP_ID"
         Log.d(TAG, "getCurrentWeather: $url")
+        Looper.prepare()
         client.post(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
