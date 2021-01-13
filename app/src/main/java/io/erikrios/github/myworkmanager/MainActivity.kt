@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 binding.btnCancelTask.isEnabled = false
                 if (workInfo.state == WorkInfo.State.ENQUEUED) {
                     binding.btnCancelTask.isEnabled = true
-
                 }
             })
     }
