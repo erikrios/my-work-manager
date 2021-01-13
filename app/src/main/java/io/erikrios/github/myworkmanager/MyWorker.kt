@@ -9,8 +9,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
+import com.loopj.android.http.SyncHttpClient
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
 import java.text.DecimalFormat
@@ -35,7 +35,7 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
 
     private fun getCurrentWeather(city: String?): Result {
         Log.d(TAG, "getCurrentWeather: Start.....")
-        val client = AsyncHttpClient()
+        val client = SyncHttpClient()
         val url = "https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$APP_ID"
         Log.d(TAG, "getCurrentWeather: $url")
         client.post(url, object : AsyncHttpResponseHandler() {
