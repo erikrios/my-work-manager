@@ -1,8 +1,11 @@
 package io.erikrios.github.myworkmanager
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import io.erikrios.github.myworkmanager.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -18,6 +21,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        when (v?.id) {
+            binding.btnOneTimeTask.id -> startOneTimeTask()
+        }
+    }
 
+    private fun startOneTimeTask() {
+        binding.textStatus.text = getString(R.string.status)
+        val data = Data.Builder()
+            .putString(MyWorker.EXTRA_CITY, binding.editCity.text.toString())
+            .build()
+        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(MyWorker::class.java)
+            .setInputData(data)
+            .build()
+        WorkManager.getInstance().enqueue(oneTimeWorkRequest)
+        WorkManager.getInstance()
+            .getWorkInfoByIdLiveData(oneTimeWorkRequest.id)
+            .observe(this@MainActivity, { workInfo ->
+                val status = workInfo.state.name
+                binding.textStatus.append("\n$status")
+            })
     }
 }
