@@ -3,9 +3,7 @@ package io.erikrios.github.myworkmanager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import io.erikrios.github.myworkmanager.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -31,8 +29,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val data = Data.Builder()
             .putString(MyWorker.EXTRA_CITY, binding.editCity.text.toString())
             .build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
         val oneTimeWorkRequest = OneTimeWorkRequest.Builder(MyWorker::class.java)
             .setInputData(data)
+            .setConstraints(constraints)
             .build()
         WorkManager.getInstance().enqueue(oneTimeWorkRequest)
         WorkManager.getInstance()
